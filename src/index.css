@@ -1,0 +1,29 @@
+.linkNav a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    margin: 10px;
+    height: 100%;
+}
+.active {
+    color: rgb(255, 255, 255) !important;
+    /* background-color: red; */
+}
+
+.product .iconsProduct {
+    display: none;
+}
+.product {
+    border: 1px solid #dddddd;
+}
+.product:hover {
+    border-color:  #0b37ca;
+}
+.stars {
+    display: none;
+}
+.product:hover .stars {
+    display: flex;
+}
+.product:hover .iconsProduct {
+    display: flex;
+}
