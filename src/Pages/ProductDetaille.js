@@ -14,22 +14,22 @@ function ProductDetaille() {
     const [productDetaille, setProductDetaille] = useState({})
     const [image, setImage] = useState()
     const {idLien} = useParams();
-    const [tt, setTT] = useState()    
+    const [categoryById, setCategoryById] = useState()    
     const [loading, setLoading] = useState(true)
     const [category, setCategory] = useState([])
+useEffect(() => {
+  axios.get(`https://dummyjson.com/products/${idLien}`)
+    .then((res) => {
+      setProductDetaille(res.data);
+      if (res.data?.images?.length > 0) {
+        setImage(res.data.images[0]);
+      }
+      setCategoryById(res.data.category);
+    })
+    .catch((err) => console.log(err))
+}, [idLien]); 
       useEffect(() => {
-      axios.get(`https://dummyjson.com/products/${idLien}`)
-        .then((res) => {
-          setProductDetaille(res.data)
-            if (!image && productDetaille?.images?.length > 0) {
-              setImage(productDetaille.images[0]);
-            }
-          setTT(productDetaille.category)
-        })
-        .catch((err) => console.log(err))
-    }, [productDetaille, image]);
-      useEffect(() => {
-    axios.get(`https://dummyjson.com/products/category/${tt}`)
+    axios.get(`https://dummyjson.com/products/category/${categoryById}`)
       .then((res) => {
         setCategory(res.data.products)
         setLoading(false)
@@ -37,19 +37,21 @@ function ProductDetaille() {
         
       })
       .catch((err) => console.log(err))
-  }, [tt])
+  }, [categoryById])
 
   return (
     <div style={{maxWidth: '1100px', margin: '100px auto', marginBottom: '100px'}}>
       <div>
-          <div class="card mb-3" style={{padding: '30px', marginBottom: '50px'}}>
+          <div class="card mb-5" style={{padding: '30px', marginBottom: '50px'}}>
               <div class="row g-0">
                   <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}} class="col-md-4">
                       <img style={{width: '300px', marginBottom: '20px'}} src={image} class="img-fluid rounded-start" alt="..." />  {/* Solution 1 : Optional chaining (la plus simple)*/}
                       <div style={{display: 'flex', alignItems: 'center',  justifyContent: 'space-evenly', width: '100%'}}>
-                      <img onClick={() => {setImage(productDetaille?.images?.[0])}} style={{width: '70px', cursor: 'pointer'}} src={productDetaille?.images?.[0] || "/no-image.png"} class="img-fluid rounded-start" alt="..." />
-                      <img onClick={() => {setImage(productDetaille?.images?.[1])}} style={{width: '70px', cursor: 'pointer'}} src={productDetaille?.images?.[1] || "/no-image.png"} class="img-fluid rounded-start" alt="..." />
-                      <img onClick={() => {setImage(productDetaille?.images?.[2])}} style={{width: '70px', cursor: 'pointer'}} src={productDetaille?.images?.[2] || "/no-image.png"} class="img-fluid rounded-start" alt="..." />
+                        {productDetaille.images?.map((e, i) => ( <img onClick={() => setImage(e)} key={i} src={e} alt={`image ${i}`} style={{width: '70px', cursor: 'pointer'}} />))}
+                         {/* <img onClick={() => {setImage(productDetaille?.images?.[0])}} style={{width: '70px', cursor: 'pointer'}} src={productDetaille?.images?.[0] || "/no-image.png"} class="img-fluid rounded-start" alt="..." /> */}
+                      
+                      {/* <img onClick={() => {setImage(productDetaille?.images?.[1])}} style={{width: '70px', cursor: 'pointer'}} src={productDetaille?.images?.[1] || "/no-image.png"} class="img-fluid rounded-start" alt="..." />
+                      <img onClick={() => {setImage(productDetaille?.images?.[2])}} style={{width: '70px', cursor: 'pointer'}} src={productDetaille?.images?.[2] || "/no-image.png"} class="img-fluid rounded-start" alt="..." /> */}
                       </div>
                   </div>
                   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}} class="col-md-8">
